@@ -25,8 +25,9 @@ namespace HackerNewsApi.Services
         {
             var storyIds = await _httpClient.GetStringAsync(NewStoriesUrl);
             var ids = JsonConvert.DeserializeObject<List<int>>(storyIds);
-            
-            var tasks = ids.Take(10).Select(async id => 
+            const int maxStories = 100;
+
+            var tasks = ids.Take(maxStories).Select(async id => 
             {
                 var url = string.Format(ItemUrl, id);
                 var response = await _httpClient.GetStringAsync(url);
