@@ -17,6 +17,20 @@ builder.Services.AddScoped<IHackerNewsService, HackerNewsService>();
 // Add other services
 builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
+
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDevServer",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:4200") // Angular dev server URL
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -36,5 +50,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 app.MapControllers();
+
+// Use CORS
+app.UseCors("AllowAngularDevServer");
 
 app.Run();
